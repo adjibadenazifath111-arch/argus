@@ -1,0 +1,25 @@
+[Unit]
+Description=ARGUS - Email Agent via MCP (SOC augmente par IA)
+After=network-online.target docker.service argus-mcp.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nazifath1
+WorkingDirectory=/home/nazifath1/elklab
+
+EnvironmentFile=/etc/argus-email-mcp.env
+
+Environment="HOME=/home/nazifath1"
+Environment="PYTHONUNBUFFERED=1"
+
+ExecStart=/home/nazifath1/elklab/soc-mcp/venv/bin/python /home/nazifath1/elklab/soc_email_agent_mcp.py
+
+Restart=always
+RestartSec=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

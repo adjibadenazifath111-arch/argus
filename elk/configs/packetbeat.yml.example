@@ -1,0 +1,41 @@
+# Packetbeat — exemple de référence (serveur CL2024050)
+# Source : /etc/packetbeat/packetbeat.yml du lab ARGUS (23/09/2026)
+# Adapter `device` et `name`/`sensor` selon la cible de reproduction.
+
+packetbeat.interfaces.device: enp2s0
+packetbeat.interfaces.buffer_size_mb: 16
+
+packetbeat.flows.enabled: true
+packetbeat.flows.timeout: 30s
+packetbeat.flows.period: 10s
+
+packetbeat.protocols:
+- type: dns
+  ports: [53]
+- type: http
+  ports: [80, 8000, 8080, 9200]      # 9200 : API Elasticsearch => http SEUL
+- type: tls
+  ports: [443, 8443, 8220]           # PAS de 9200 ici (doublon supprimé)
+- type: amqp
+  ports: [5672]
+- type: nfs
+  ports: [2049]
+
+name: "CL2024050-packetbeat"
+fields:
+  log_source: packetbeat
+  sensor: CL2024050
+fields_under_root: true
+
+processors:
+- add_host_metadata: ~
+
+output.logstash:
+  hosts: ["127.0.0.1:5044"]
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/packetbeat
+  name: packetbeat
+  keepfiles: 7

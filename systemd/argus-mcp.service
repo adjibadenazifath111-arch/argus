@@ -1,0 +1,18 @@
+[Unit]
+Description=ARGUS - Serveur MCP (SOC augmente par IA)
+After=network.target
+
+[Service]
+Type=simple
+User=nazifath1
+WorkingDirectory=/home/nazifath1/elklab/soc-mcp
+ExecStart=/bin/bash /home/nazifath1/elklab/soc-mcp/run_mcp.sh
+Restart=always
+RestartSec=5
+Environment=MCP_TRANSPORT=streamable-http
+Environment=MCP_HOST=127.0.0.1
+Environment=MCP_PORT=8700
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

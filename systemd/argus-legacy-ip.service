@@ -1,0 +1,15 @@
+[Unit]
+Description=ARGUS - interface factice portant l'IP historique 10.50.17.91 (Fleet/agents)
+Before=network.target
+After=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=-/usr/sbin/ip link add argus0 type dummy
+ExecStart=/usr/sbin/ip addr replace 10.50.17.91/32 dev argus0
+ExecStart=/usr/sbin/ip link set argus0 up
+ExecStop=/usr/sbin/ip link del argus0
+
+[Install]
+WantedBy=multi-user.target

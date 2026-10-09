@@ -1,0 +1,14 @@
+[Unit]
+Description=ARGUS - pont Elasticsearch 10.50.17.91:9200 -> 127.0.0.1:9200 (Fleet + agents distants)
+Requires=argus-legacy-ip.service
+After=argus-legacy-ip.service docker.service
+Wants=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/socat TCP-LISTEN:9200,bind=10.50.17.91,fork,reuseaddr TCP:127.0.0.1:9200
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

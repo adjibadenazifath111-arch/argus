@@ -1,0 +1,10 @@
+{
+  "index_patterns": ["logs-*", ".ds-logs-*", "snort-*"],
+  "priority": 500,
+  "data_stream": {},
+  "template": {
+    "settings": {
+      "index.number_of_replicas": 0
+    }
+  }
+}

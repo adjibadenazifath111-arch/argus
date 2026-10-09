@@ -1,0 +1,112 @@
+{
+  "description": "ARGUS - parsing des alertes Snort. Remplace le pipeline Logstash retire pour economiser ~900 Mo de RAM. Le grok est identique a celui de repro_kit/configs/logstash.conf, converti de la syntaxe Logstash ([a][b]) vers la syntaxe ES (a.b). Les deux variantes IPv4-avec-ports et IPv6-sans-ports sont dans un seul 'patterns' : ES les essaie dans l'ordre, ce qui evite un deuxieme processeur de repli (impossible ici, car le grok ES leve une exception sur non-match et court-circuite le pipeline vers on_failure).",
+
+  "version": 1,
+
+  "processors": [
+
+    {
+      "grok": {
+        "tag": "argus_snort",
+        "description": "Alertes Snort - motif 1 : IPv4 avec ports, motif 2 : IPv6 sans ports",
+        "if": "ctx.log_source == 'snort' && ctx.message != null",
+        "field": "message",
+        "patterns": [
+          "^\\s*%{DATA:snort.timestamp}\\s+\\[\\*\\*\\]\\s+\\[%{INT:snort.generator}:%{INT:snort.signature_id}:%{INT:snort.revision}\\]\\s+%{DATA:snort.signature}\\s+\\[\\*\\*\\]\\s+(\\[Classification:\\s+%{DATA:snort.classification}\\]\\s+)?(\\[Priority:\\s+%{INT:snort.priority}\\]\\s+)?\\{%{WORD:network.transport}\\}\\s+%{IP:source.ip}:%{INT:source.port}\\s+->\\s+%{IP:destination.ip}:%{INT:destination.port}",
+          "^\\s*%{DATA:snort.timestamp}\\s+\\[\\*\\*\\]\\s+\\[%{INT:snort.generator}:%{INT:snort.signature_id}:%{INT:snort.revision}\\]\\s+%{DATA:snort.signature}\\s+\\[\\*\\*\\]\\s+(\\[Classification:\\s+%{DATA:snort.classification}\\]\\s+)?(\\[Priority:\\s+%{INT:snort.priority}\\]\\s+)?\\{%{WORD:network.transport}\\}\\s+%{IP:source.ip}\\s+->\\s+%{IP:destination.ip}"
+        ]
+      }
+    },
+
+    {
+      "convert": {
+        "tag": "argus_snort",
+        "if": "ctx.snort != null && ctx.snort.generator != null",
+        "field": "snort.generator",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "tag": "argus_snort",
+        "if": "ctx.snort != null && ctx.snort.signature_id != null",
+        "field": "snort.signature_id",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "tag": "argus_snort",
+        "if": "ctx.snort != null && ctx.snort.revision != null",
+        "field": "snort.revision",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "tag": "argus_snort",
+        "if": "ctx.snort != null && ctx.snort.priority != null",
+        "field": "snort.priority",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "tag": "argus_snort",
+        "if": "ctx.source != null && ctx.source.port != null",
+        "field": "source.port",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "tag": "argus_snort",
+        "if": "ctx.destination != null && ctx.destination.port != null",
+        "field": "destination.port",
+        "type": "integer"
+      }
+    },
+
+    {
+      "set": {
+        "tag": "argus_snort",
+        "if": "ctx.snort != null",
+        "field": "event.module",
+        "value": "snort"
+      }
+    },
+    {
+      "set": {
+        "tag": "argus_snort",
+        "if": "ctx.snort != null",
+        "field": "event.dataset",
+        "value": "snort.alert"
+      }
+    },
+
+    {
+      "script": {
+        "tag": "argus_snort",
+        "description": "Retire uniquement le marqueur d'echec du grok, en preservant les tags Elastic (beats, agent). Un remove sur 'tags' effacerait tout.",
+        "if": "ctx.log_source == 'snort' && ctx.tags != null",
+        "source": "ctx.tags.removeIf(t -> t == '_ingestgrok_failure'); if (ctx.tags.isEmpty()) { ctx.remove('tags'); }"
+      }
+    }
+  ],
+
+  "on_failure": [
+    {
+      "set": {
+        "description": "Ligne non reconnue : on la conserve telle quelle avec le motif de l'echec, consultable via error.message:*, plutot que de la perdre.",
+        "field": "error.message",
+        "value": "{{ _ingest.on_failure_message }}"
+      }
+    },
+    {
+      "set": {
+        "field": "argus.parse_echec",
+        "value": true
+      }
+    }
+  ]
+}

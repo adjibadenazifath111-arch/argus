@@ -1,0 +1,38 @@
+{
+  "index_patterns": ["snort-*"],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "index.default_pipeline": "argus-snort"
+    },
+    "mappings": {
+      "properties": {
+        "snort": {
+          "properties": {
+            "signature_id": { "type": "integer" },
+            "revision":     { "type": "integer" },
+            "priority":     { "type": "integer" },
+            "generator":    { "type": "integer" }
+          }
+        },
+        "source": {
+          "properties": {
+            "ip":   { "type": "ip" },
+            "port": { "type": "integer" }
+          }
+        },
+        "destination": {
+          "properties": {
+            "ip":   { "type": "ip" },
+            "port": { "type": "integer" }
+          }
+        },
+        "event": {
+          "properties": {
+            "dataset": { "type": "keyword" }
+          }
+        }
+      }
+    }
+  }
+}

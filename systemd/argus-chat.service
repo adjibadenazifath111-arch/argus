@@ -1,0 +1,25 @@
+[Unit]
+Description=ARGUS - Chat-SOC web pour analyste (interroge ELK via MCP)
+After=network-online.target docker.service argus-mcp.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nazifath1
+WorkingDirectory=/home/nazifath1/elklab/soc-mcp
+
+EnvironmentFile=/etc/argus-chat.env
+
+Environment="HOME=/home/nazifath1"
+Environment="PYTHONUNBUFFERED=1"
+
+ExecStart=/home/nazifath1/elklab/soc-mcp/venv/bin/python /home/nazifath1/elklab/soc-mcp/chat_soc.py
+
+Restart=always
+RestartSec=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

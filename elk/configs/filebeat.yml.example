@@ -1,0 +1,20 @@
+# Filebeat — exemple de référence (ingestion des alertes Snort)
+# Source : /etc/filebeat/filebeat.yml du lab ARGUS (23/09/2026)
+
+filebeat.inputs:
+
+- type: filestream
+  id: snort-alert-fast
+  enabled: true
+  paths:
+    - /var/log/snort/snort.alert.fast
+
+  fields:
+    log_source: snort
+    sensor: CL2024050
+  fields_under_root: true
+
+output.logstash:
+  hosts: ["127.0.0.1:5044"]
+
+logging.level: info
