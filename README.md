@@ -1,4 +1,4 @@
-<h1 align="center">Hi 👋 Je suis Nazifath (Noa)</h1>
+<h1 align="center">Hi 👋 Je suis Nazifath (Xnoa)</h1>
 <p align="center">
   <b>Étudiante analyste cybersécurité @EMN — promo 2026 · Cotonou, Bénin 🇧🇯</b><br>
   SOC • Forensic réseau • Détection d'anomalies (ELK / IA) · CTF player 🔐
