@@ -31,30 +31,7 @@ Un serveur **Kali Linux** héberge la suite **Elastic 9.1.3** (Elasticsearch, Ki
 
 ## 🏗️ Architecture
 
-```
-          Attaques encadrées (scan · brute SSH · DNS piégé · HTTP clair · service Windows)
-                               │
-        ┌──────────────────────┴───────────────────────┐
-   Poste ubuntu-noa                              Poste desktop-k6eb242 (Windows)
-   Elastic Agent + Elastic Defend                Elastic Agent + Elastic Defend
-        └──────────────── journaux ────────────────────┘
-                               ▼
-   ┌───────────────── Serveur Kali Linux (Docker + systemd) ─────────────────┐
-   │  Fleet Server   ·   Packetbeat (capteur réseau)   ·   Elasticsearch 9.1.3 │
-   │                                        │ (stockage, TLS)                   │
-   │                                        ▼                                   │
-   │                         Kibana — Elastic Security                         │
-   │                         (7 règles de détection ES|QL)                     │
-   └────────────────────────────────┬──────────────────────────────────────────┘
-                                     │ lecture des alertes
-   ┌───────────────── Couche ARGUS (services systemd) ──────────────────────┐
-   │   Serveur MCP (4 outils)  ──►  Groq · openai/gpt-oss-20b (API externe)  │
-   │        │                                                                │
-   │   Agent de notification (courriel)      Chat web (langage naturel)      │
-   └────────────────────────────────┬──────────────────────────────────────┘
-                                     ▼
-                               Analyste SOC
-```
+   ![Architecture ARGUS](architecture.png)
 
 *(Schéma détaillé dans `docs/` — Livrable 3, figure 1.)*
 
