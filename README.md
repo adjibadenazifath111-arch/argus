@@ -6,17 +6,17 @@
 
 ---
 
-### 🎯 Mes domaines
+###  Mes domaines
 - 🛡️ **Défensif** : SOC, SIEM, détection d'anomalies, forensic réseau
 - ⚔️ **Offensif** : CTF, pentest, OSINT
 - 📊 **Gouvernance & R&D** : j'explore large pour trouver ma voie
 
 ### 🔭 En ce moment
-- 🏥 **ARGUS** — un SOC augmenté par l'IA pour un système d'information hospitalier
-- 🧩 Je progresse en forensic réseau (déchiffrement TLS/IPsec, analyse RDP, stégano)
+-  **ARGUS** — un SOC augmenté par l'IA pour un système d'information hospitalier
+-  Je progresse en forensic réseau (déchiffrement TLS/IPsec, analyse RDP, stégano)
 - 📚 J'apprends en construisant : chaque projet = une compétence de plus
 
-### 🏆 CTF & plateformes
+###  CTF & plateformes
 [![Root-Me](https://img.shields.io/badge/Root--Me-NOA-5c9c31?style=flat&logo=hackthebox&logoColor=white)](https://www.root-me.org/)
 [![TryHackMe](https://img.shields.io/badge/TryHackMe-Xnoa-212c42?style=flat&logo=tryhackme&logoColor=white)](https://tryhackme.com/)
 &nbsp;·&nbsp; HackerLab Bénin
